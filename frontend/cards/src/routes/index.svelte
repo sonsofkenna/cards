@@ -1,0 +1,1 @@
+<a href="/cards"><h1>Welcome to Cards{"!"}</h1></a>
