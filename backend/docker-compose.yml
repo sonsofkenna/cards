@@ -1,0 +1,18 @@
+version: '3.4'
+
+services:
+  cardsrecent:
+    image: cardsrecent
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 3000:3000
+    
+  database:
+    image: mongo 
+    container_name: 'cards_container'
+    ports: 
+      - '27017-27019:27017-27019'
+
+      
