@@ -47,7 +47,14 @@ def cards():
 
     reponse_object['cards'] = cards
   elif request.method == 'POST':
-    pass
+
+    card = request.get_json()
+    mycol = db["cards"]
+
+    # card = { "content": "asdfasdf", "author": 1, "likes": 1 }
+
+    x = mycol.insert_one(card)
+    reponse_object = {'status': 201}
 
   return jsonify(reponse_object)
 
