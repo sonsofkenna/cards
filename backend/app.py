@@ -21,10 +21,7 @@ def index():
 @app.route('/cards', methods=['POST', 'GET'])
 def cards():
 
-  print("here")
   reponse_object = {'status': 200}
-
-  print('h')
 
   if request.method == 'GET':
     result = db.cards.find(
@@ -42,49 +39,54 @@ def cards():
     cards = []
 
     for card in result:
-      card['author']['_id'] = str(card['author']['_id'])
       cards.append(card)
 
-    reponse_object['cards'] = cards
+    # reponse_object['cards'] = cards
+    return jsonify({'result' : cards})
   elif request.method == 'POST':
 
     card = request.get_json()
     mycol = db["cards"]
 
-    # card = { "content": "asdfasdf", "author": 1, "likes": 1 }
 
     x = mycol.insert_one(card)
     reponse_object = {'status': 201}
 
   return jsonify(reponse_object)
 
-@app.route('/users')
+@app.route('/users', methods=['POST', 'GET'])
 def users():
-  response_object = {'status': 200}
 
   if request.method == 'GET':
-    cursor = db.users.find({})
-    result = []
+    result = db.users.find(
+      filter={},
+      projection={
+        '_id': 0,
+        'id': 1,
+        'first': 1,
+        'last': 1,
+        'nick': 1,
+        'pfp': 1,
+        'followers':1
+      }
+    )
 
-    for document in cursor:
-      document['_id'] = str(document['_id'])
-      result.append(document)
+    authors = []
 
-    response_object['users'] = result
+    for author in result:
+      authors.append(author)
 
-  return jsonify(response_object)
+    return jsonify({'result' : authors})
+  elif request.method == 'POST':
 
-@app.route('/users/<user_id>')
-def user(user_id):
-  response_object = {'status': 200}
+    author = request.get_json()
+    mycol = db["users"]
 
-  if request.method == 'GET':
-    result = db.users.find_one({'id': user_id})
-    result['_id'] = str(result['_id'])
 
-    response_object['user'] = result
+    x = mycol.insert_one(author)
+    reponse_object = {'status': 201}
 
-  return jsonify(response_object)
+  return jsonify(reponse_object)
 
 if __name__ == '__main__':
   app.run(host='0.0.0.0', port=3000)
