@@ -8,15 +8,15 @@ on:
 
 jobs:
 
-  build:
+#   build:
 
-    runs-on: ubuntu-latest
+#     runs-on: ubuntu-latest
 
-    steps:
-    - uses: actions/checkout@v2
-    - name: Build the Docker image
-      working-directory: ./backend
-      run: docker build .  --tag test123
+#     steps:
+#     - uses: actions/checkout@v2
+#     - name: Build the Docker image
+#       working-directory: ./backend
+#       run: docker build .  --tag test123
       
     
 
@@ -27,6 +27,11 @@ jobs:
     steps:
 #       - name: Check out the repo
 #         uses: actions/checkout@v2
+
+      - uses: actions/checkout@v2
+      - name: Build the Docker image
+        working-directory: ./backend
+        run: docker build .  --tag test123
       
       - name: Log in to Docker Hub
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
