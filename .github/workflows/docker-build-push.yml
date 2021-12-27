@@ -14,8 +14,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - working-directory: ./backend
     - name: Build the Docker image
+      working-directory: ./backend
       run: docker build .  --tag my-image-name:$(date +%s) 
       
     
