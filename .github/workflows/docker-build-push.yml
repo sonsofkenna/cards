@@ -56,5 +56,5 @@ jobs:
           file: backend/Dockerfile
           context: ./backend
           push: true
-          tags: test123
+          tags: firstdockerrepo/dockerhub:cardsapi
 #           labels: ${{ steps.meta.outputs.labels }}
