@@ -1,4 +1,5 @@
 import uuid
+from bson.json_util import dumps
 from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
 from pymongo import MongoClient
@@ -13,7 +14,8 @@ app = Flask(__name__)
 def index():
   api_calls = {
     'users': '/users',
-    'cards': '/cards'
+    'cards': '/cards',
+    'cards2': '/cards2'
   }
 
   return jsonify(api_calls)
@@ -87,6 +89,43 @@ def users():
     reponse_object = {'status': 201}
 
   return jsonify(reponse_object)
+
+@app.route('/cards2', methods=['GET'])
+def cards2():
+
+  # Requires the PyMongo package.
+# https://api.mongodb.com/python/current
+
+  if request.method == 'GET':
+    
+    pipeline = [
+    {
+        '$lookup': {
+            'from': 'users', 
+            'localField': 'author', 
+            'foreignField': 'id', 
+            'as': 'user'
+        }
+    }, {
+        '$unwind': {
+            'path': '$user'
+        }
+    }, {
+        '$project': {
+            '_id':0,
+            'content': 1, 
+            'likes': 1, 
+            'user': 1
+        }
+    }]
+    
+    
+    result = db.cards.aggregate(pipeline)
+    jsonResult = dumps(result)
+    
+  return jsonResult
+
+
 
 if __name__ == '__main__':
   app.run(host='0.0.0.0', port=3000)
